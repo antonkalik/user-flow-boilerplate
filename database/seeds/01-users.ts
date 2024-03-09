@@ -9,6 +9,7 @@ const tableName = 'users';
 const testPassword = process.env.TEST_PASSWORD as string;
 const testUserName = process.env.TEST_USERNAME as string;
 const testEmail = process.env.TEST_EMAIL as string;
+
 export async function seed(knex: Knex): Promise<void> {
   await knex(tableName).del();
   const users: Omit<User, 'id' | 'password' | 'created_at' | 'updated_at'>[] = [
