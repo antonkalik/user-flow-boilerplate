@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { UserModel } from 'src/models/UserModel';
 import type { User } from 'src/@types';
+import { TokenService } from 'src/services/TokenService';
+import { EmailService } from 'src/services/EmailService';
 
 export const forgotPasswordController = async (req: Request, res: Response) => {
   try {
@@ -10,17 +12,22 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
       email: string;
     } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ message: 'Invalid email' });
-    }
-
-    const user = await UserModel.findOneById<User>(req.user.id);
+    const user = await UserModel.findByEmail(email);
 
     if (user) {
-      return res.status(200).json(user);
-    } else {
-      return res.sendStatus(401);
+      const token = await TokenService.sign(
+        {
+          id: user.id,
+        },
+        {
+          expiresIn: '1 day',
+        }
+      );
+      await UserModel.createPasswordResetToken(user.id, token);
+      await EmailService.sendPasswordResetEmail(email, token);
     }
+
+    return res.sendStatus(200);
   } catch (error) {
     return res.sendStatus(500);
   }

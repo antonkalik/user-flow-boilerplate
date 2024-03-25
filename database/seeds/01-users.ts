@@ -1,9 +1,11 @@
-require('dotenv').config();
+import * as dotenv from 'dotenv';
 import { Knex } from 'knex';
 import * as process from 'process';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { Role, User } from '../../src/@types';
+
+dotenv.config();
 
 const tableName = 'users';
 const testPassword = process.env.TEST_PASSWORD as string;
