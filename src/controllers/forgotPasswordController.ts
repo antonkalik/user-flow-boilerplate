@@ -23,7 +23,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
           expiresIn: '1 day',
         }
       );
-      await UserModel.createPasswordResetToken(user.id, token);
+      await UserModel.createPasswordResetToken(token);
       await EmailService.sendPasswordResetEmail(email, token);
     }
 
