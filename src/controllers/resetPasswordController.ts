@@ -26,7 +26,7 @@ export const resetPasswordController = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await UserModel.updateOneById(user.id, { password: hashedPassword, passwordResetToken: null });
+    await UserModel.updateById(user.id, { password: hashedPassword, passwordResetToken: null });
 
     return res.sendStatus(200);
   } catch (error) {

@@ -7,7 +7,7 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     const { password } = req.body;
     if (!password) return res.sendStatus(400);
     const hashedPassword = (await bcrypt.hash(password, 10)) as string;
-    const user = await UserModel.updateOneById(req.user.id, { password: hashedPassword });
+    const user = await UserModel.updateById(req.user.id, { password: hashedPassword });
 
     return res.status(200).json({ id: user.id });
   } catch (error) {

@@ -15,7 +15,7 @@ export async function signUpController(req: Request, res: Response) {
   const validation = validate<Payload>(req.body, userSchema);
 
   if (!validation.isValid) {
-    return res.status(400).send(`Invalid ${validation.invalidKey}`);
+    return res.status(400).json({ message: `Invalid ${validation.invalidKey}` });
   }
 
   try {
@@ -25,7 +25,7 @@ export async function signUpController(req: Request, res: Response) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    const hashedPassword = (await bcrypt.hash(password, 10));
+    const hashedPassword = await bcrypt.hash(password, 10);
     const username = `${email.split('@')[0]}${getRandomString(5)}`;
     const createdUser = await UserModel.create<Payload>({
       email,

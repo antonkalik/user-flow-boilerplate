@@ -11,7 +11,6 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   if (!token) return res.sendStatus(401);
 
   if (!JWT_SECRET) {
-    console.error('JWT_SECRET Not Found');
     return res.sendStatus(500);
   }
 
@@ -32,7 +31,6 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     req.user = userSession;
     next();
   } catch (error) {
-    console.error('JWT_ERROR', error);
     return res.sendStatus(401);
   }
 }
