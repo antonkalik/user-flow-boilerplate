@@ -25,7 +25,7 @@ export const updateUserController = async (req: Request, res: Response) => {
       });
     }
 
-    const updatedUser = await UserModel.updateOneById<typeof payload>(req.user.id, payload);
+    const updatedUser = await UserModel.updateById<typeof payload>(req.user.id, payload);
     res.status(200).json(updatedUser);
   } catch (error) {
     res.sendStatus(500);

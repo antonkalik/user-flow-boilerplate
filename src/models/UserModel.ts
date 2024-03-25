@@ -3,6 +3,7 @@ import { Role, User, DefaultUserData } from 'src/@types';
 
 export class UserModel extends Model {
   static tableName = 'users';
+  static context: UserModel;
 
   public static async create<Payload>(data: Payload) {
     return super.insert<Payload & DefaultUserData>({
@@ -11,7 +12,7 @@ export class UserModel extends Model {
     });
   }
 
-  public static findByEmail(email: string): Promise<User | null> {
+  public static findByEmail(email: string) {
     return this.findOneBy<
       {
         email: string;
@@ -20,7 +21,7 @@ export class UserModel extends Model {
     >({ email });
   }
 
-  public static findByUsername(username: string): Promise<User | null> {
+  public static async findByUsername(username: string): Promise<User | null> {
     return this.findOneBy<
       {
         username: string;

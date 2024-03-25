@@ -1,14 +1,17 @@
-require('dotenv').config();
+import * as dotenv from 'dotenv';
 import { Knex } from 'knex';
 import * as process from 'process';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { Role, User } from '../../src/@types';
 
+dotenv.config();
+
 const tableName = 'users';
 const testPassword = process.env.TEST_PASSWORD as string;
 const testUserName = process.env.TEST_USERNAME as string;
 const testEmail = process.env.TEST_EMAIL as string;
+
 export async function seed(knex: Knex): Promise<void> {
   await knex(tableName).del();
   const users: Omit<User, 'id' | 'password' | 'created_at' | 'updated_at'>[] = [

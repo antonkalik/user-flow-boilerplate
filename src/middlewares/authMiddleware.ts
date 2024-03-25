@@ -1,7 +1,7 @@
-import { jwt } from 'src/utils/jwt';
-import { Redis } from 'src/redis';
+import { RedisService } from 'src/services/RedisService';
 import type { Request, Response, NextFunction } from 'express';
 import type { UserSession } from 'src/@types';
+import { TokenService } from 'src/services/TokenService';
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers['authorization'];
@@ -11,20 +11,19 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   if (!token) return res.sendStatus(401);
 
   if (!JWT_SECRET) {
-    console.error('JWT_SECRET Not Found');
     return res.sendStatus(500);
   }
 
   if (!token) return res.status(401).json({ error: 'Token not provided' });
 
   try {
-    const userSession = await jwt.verify<UserSession>(token);
+    const userSession = await TokenService.verify<UserSession>(token);
 
     if (!userSession) {
       return res.sendStatus(401);
     }
 
-    const storedToken = await Redis.getSession(userSession.id);
+    const storedToken = await RedisService.getSession(userSession.id);
 
     if (!storedToken || storedToken !== token) {
       return res.sendStatus(401);
@@ -32,7 +31,6 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     req.user = userSession;
     next();
   } catch (error) {
-    console.error('JWT_ERROR', error);
     return res.sendStatus(401);
   }
 }
