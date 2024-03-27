@@ -7,8 +7,8 @@ type AttachmentFile = {
   cid?: string;
 };
 
-export const generateAttachments = (files: AttachmentFile[] = []) => {
-  return files.map(file => {
+export const generateAttachments = (files: AttachmentFile[] = []) =>
+  files.map(file => {
     const ext = file.ext || Extension.png;
     const filename = `${file.name}.${ext}`;
     const imagePath = path.join(__dirname, '..', 'src/assets', filename);
@@ -18,4 +18,3 @@ export const generateAttachments = (files: AttachmentFile[] = []) => {
       cid: file.cid || file.name,
     };
   });
-};
