@@ -9,14 +9,18 @@ dotenv.config();
 
 export class EmailService {
   private static transporter: nodemailer.Transporter;
+  private static env = {
+    USER: process.env.MAIL_USER,
+    PASS: process.env.MAIL_PASSWORD,
+  };
 
   public static initialize() {
     try {
       EmailService.transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASSWORD,
+          user: this.env.USER,
+          pass: this.env.PASS,
         },
       });
     } catch (error) {
@@ -34,7 +38,7 @@ export class EmailService {
       }>('passwordResetTemplate', { token, host });
       const attachments = generateAttachments([{ name: 'email_logo' }]);
       const info = await EmailService.transporter.sendMail({
-        from: process.env.MAIL_USER,
+        from: this.env.USER,
         to: email,
         subject: 'Password Reset',
         html: template,

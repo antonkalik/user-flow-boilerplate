@@ -1,6 +1,6 @@
 import { TokenService } from 'src/services/TokenService';
 import { RedisService } from 'src/services/RedisService';
-import {EmailService} from "src/services/EmailService";
+import { EmailService } from 'src/services/EmailService';
 
 export const initialize = async () => {
   await RedisService.initialize();
